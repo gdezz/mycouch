@@ -13,8 +13,8 @@ namespace MyCouch.UnitTests
 
             SUT.Address.Should().Be(new Uri("http://localhost:5984/mydb"));
             SUT.DbName.Should().Be("mydb");
-            SUT.BasicAuth.Should().NotBeNull();
-            SUT.BasicAuth.Value.Should().NotBeNullOrWhiteSpace();
+            SUT.Credentials.Should().NotBeNull();
+            SUT.Credentials.Should().BeOfType<BasicAuthCredentials>();
         }
 
         [Fact]
@@ -23,8 +23,8 @@ namespace MyCouch.UnitTests
             SUT = new DbConnectionInfo("http://localhost:5984", "mydb");
 
             SUT.Address.Should().Be(new Uri("http://localhost:5984/mydb"));
-            SUT.DbName.Should().Be("mydb");
-            SUT.BasicAuth.Should().BeNull();
+            SUT.Credentials.Should().NotBeNull();
+            SUT.Credentials.Should().BeOfType<AnonymousCredentials>();
         }
 
         [Theory]
@@ -39,7 +39,8 @@ namespace MyCouch.UnitTests
 
             SUT.Address.OriginalString.Should().Be(expectedResult);
             SUT.DbName.Should().Be("mydb");
-            SUT.BasicAuth.Should().BeNull();
+            SUT.Credentials.Should().NotBeNull();
+            SUT.Credentials.Should().BeOfType<AnonymousCredentials>();
         }
     }
 
@@ -51,8 +52,8 @@ namespace MyCouch.UnitTests
             SUT = new ServerConnectionInfo("http://s%40:p%40ssword@localhost:5984");
 
             SUT.Address.Should().Be(new Uri("http://localhost:5984"));
-            SUT.BasicAuth.Should().NotBeNull();
-            SUT.BasicAuth.Value.Should().NotBeNullOrWhiteSpace();
+            SUT.Credentials.Should().NotBeNull();
+            SUT.Credentials.Should().BeOfType<BasicAuthCredentials>();
         }
 
         [Fact]
@@ -61,7 +62,8 @@ namespace MyCouch.UnitTests
             SUT = new ServerConnectionInfo("http://localhost:5984");
 
             SUT.Address.Should().Be(new Uri("http://localhost:5984"));
-            SUT.BasicAuth.Should().BeNull();
+            SUT.Credentials.Should().NotBeNull();
+            SUT.Credentials.Should().BeOfType<AnonymousCredentials>();
         }
     }
 }

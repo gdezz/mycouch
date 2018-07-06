@@ -73,9 +73,10 @@ namespace MyCouch.Net
             if (connectionInfo.Timeout.HasValue)
                 client.Timeout = connectionInfo.Timeout.Value;
 
-            if (connectionInfo.BasicAuth != null)
+            if (connectionInfo.Credentials != null)
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", connectionInfo.BasicAuth.Value);
+                connectionInfo.Credentials.PrepareHttpClient(client);
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", connectionInfo.BasicAuth.Value);
             }
 
             return client;

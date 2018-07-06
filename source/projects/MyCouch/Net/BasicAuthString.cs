@@ -8,6 +8,12 @@ namespace MyCouch.Net
     {
         public string Value { get; }
 
+        public BasicAuthString(System.Net.NetworkCredential networkCredential)
+        {
+            EnsureArg.IsNotNull(networkCredential, nameof(networkCredential));
+            Value = GenerateBasicAuthorizationCredentials(networkCredential.UserName, networkCredential.Password);
+
+        }
         public BasicAuthString(string username, string password)
         {
             EnsureArg.IsNotNullOrEmpty(username, nameof(username));

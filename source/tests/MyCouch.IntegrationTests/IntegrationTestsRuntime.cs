@@ -26,7 +26,7 @@ namespace MyCouch.IntegrationTests
             var connectionInfo = new ServerConnectionInfo(config.ServerUrl);
 
             if (config.HasCredentials())
-                connectionInfo.BasicAuth = new BasicAuthString(config.User, config.Password);
+                connectionInfo.Credentials = new BasicAuthCredentials(config.User, config.Password);
 
             return new MyCouchServerClient(connectionInfo, new MyCouchClientBootstrapper
             {
@@ -45,7 +45,7 @@ namespace MyCouch.IntegrationTests
             var connectionInfo = new DbConnectionInfo(config.ServerUrl, dbName);
 
             if (config.HasCredentials())
-                connectionInfo.BasicAuth = new BasicAuthString(config.User, config.Password);
+                connectionInfo.Credentials = new BasicAuthCredentials(config.User, config.Password);
 
             return new MyCouchClient(connectionInfo, new MyCouchClientBootstrapper
             {

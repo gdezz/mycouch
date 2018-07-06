@@ -28,7 +28,39 @@ namespace MyCouch
     {
         public Uri Address { get; }
         public TimeSpan? Timeout { get; set; }
-        public BasicAuthString BasicAuth { get; set; }
+
+        private MyCouchCredentials credentials;
+        public MyCouchCredentials Credentials
+        {
+            get => credentials;
+            set
+            {
+                credentials = value ?? AnonymousCredentials.Instance;
+            }
+        }
+
+        [Obsolete("Use Credentials")]
+        public BasicAuthString BasicAuth
+        {
+            get
+            {
+                BasicAuthCredentials basicAuthCredentials = Credentials as BasicAuthCredentials;
+                if ((basicAuthCredentials == null) || (basicAuthCredentials.Credential == null)) return null;
+                return new BasicAuthString(basicAuthCredentials.Credential);
+            }
+            set
+            {
+                if(value == null)
+                {
+                    Credentials = AnonymousCredentials.Instance;
+                }
+                else
+                {
+                    Credentials = new BasicAuthCredentials(value);
+                }
+            }
+        }
+
         public bool AllowAutoRedirect { get; set; } = false;
         public bool ExpectContinue { get; set; } = false;
         public bool UseProxy { get; set; } = false;
@@ -38,11 +70,11 @@ namespace MyCouch
             Ensure.Any.IsNotNull(address, nameof(address));
 
             Address = RemoveUserInfoFrom(address);
-
+            Credentials = null;
             if (!string.IsNullOrWhiteSpace(address.UserInfo))
             {
                 var userInfoParts = ExtractUserInfoPartsFrom(address);
-                BasicAuth = new BasicAuthString(userInfoParts[0], userInfoParts[1]);
+                Credentials = new BasicAuthCredentials(userInfoParts[0], userInfoParts[1]);
             }
         }
 
